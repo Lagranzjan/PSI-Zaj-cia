@@ -1,0 +1,36 @@
+install.packages("qdap")
+install.packages("wordcloud")
+install.packages("RColorBrewer")
+
+library(qdap)
+library(wordcloud)
+library(RColorBrewer)
+
+# Wczytawanie pliku tekstowego z lokalnego dysku (Biden 2021 lub 2024)
+text <- readLines(file.choose())
+# Konwersja na małe litery dla spójności analizy
+text <- tolower(paste(text, collapse = " "))
+
+# Podstawowa analiza częstości
+frequent_terms_all <- freq_terms(text)
+
+# Używamy Top200Words, aby wyłuskać realne priorytety prezydenta
+frequent_terms <- freq_terms(text, stopwords = Top200Words)
+
+# Wyświetlenie wyników w konsoli
+print(frequent_terms)
+
+# 1. Wykres słupkowy najczęstszych słów
+plot(frequent_terms)
+
+# 2. Tworzenie chmury słów (podstawowa wersja)
+wordcloud(frequent_terms$WORD, frequent_terms$FREQ)
+
+# 3. Optymalizacja chmury (ograniczenie liczby słów i minimalnej częstości)
+# Słowa o częstości poniżej 4 nie będą wyświetlane
+wordcloud(frequent_terms$WORD, frequent_terms$FREQ, min.freq = 4)
+
+# 4. Finalna, atrakcyjna wizualizacja z kolorem Dark2
+wordcloud(frequent_terms$WORD, frequent_terms$FREQ, 
+          min.freq = 4, 
+          colors = brewer.pal(8, "Dark2"))
