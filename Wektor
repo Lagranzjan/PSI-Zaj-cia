@@ -1,0 +1,5 @@
+stworz_wektor <- function(n) {
+  wektor <- 1:n
+  return(wektor)
+}
+
